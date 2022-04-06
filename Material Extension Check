@@ -1,0 +1,30 @@
+DATA:  MIO1_DELETED TYPE C.
+
+CLEAR MIO1_DATA.
+CLEAR MIO1_DELETED.
+
+//// Verifies if Material (MATNR) is extended for plant MIO1 (WERKS).
+
+SELECT SINGLE WERKS
+  INTO MIO1_DATA FROM MARC
+  WHERE MATNR = MARA-MATNR
+  AND WERKS = 'MIO1'.
+  
+//// Verifies if Material (MATNR) is deleted for plan MIO1 (LVORM).
+
+SELECT SINGLE LVORM
+  INTO MIO1_DELETED FROM MARC
+  WHERE MATNR = MARA-MATNR
+  AND WERKS = 'MIO1'.
+  
+//// Returns OK if extended (WERKS), NO if not, DEL if deleted (LVORM).
+
+IF MIO1_DATA <>''.
+MIO1_DATA = 'OK'.
+ELSE.
+  MIO1_DATA = 'NO'.
+ENDIF.
+
+IF MIO1_DELETED = 'X'.
+MIO1_DATA = 'DEL'.
+ENDIF.
